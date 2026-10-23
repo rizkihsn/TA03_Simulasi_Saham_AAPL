@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TA-03 | Monte Carlo Simulation — Saham AAPL</title>
+  <meta name="description" content="Data-Driven Monte Carlo Simulation untuk forecasting harga saham Apple (AAPL). Analisis risiko probabilitas penurunan harga lebih dari 10% dalam 30 hari ke depan.">
+  <link rel="stylesheet" href="style.css">
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+  <!-- Chart.js Annotation Plugin -->
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@3.1.0/dist/chartjs-plugin-annotation.min.js"></script>
+</head>
+<body>
+
+  <!-- Background Animation -->
+  <div class="bg-animation">
+    <div class="orb"></div>
+    <div class="orb"></div>
+    <div class="orb"></div>
+  </div>
+
+  <div class="app-container">
+
+    <!-- ============ HERO ============ -->
+    <header class="hero">
+      <div class="hero-badge">
+        <span class="dot"></span>
+        TA-03 — Pemodelan &amp; Simulasi
+      </div>
+      <h1>Monte Carlo Simulation<br><span>Saham Apple (AAPL)</span></h1>
+      <p class="subtitle">Data-Driven Risk Analysis menggunakan 5.000 skenario simulasi berdasarkan data historis saham Apple</p>
+      <p class="meta-info">Dataset Kaggle • Periode 2015 – Juni 2024 • 2.381 data return harian</p>
+    </header>
+
+    <!-- ============ STAT CARDS ============ -->
+    <div class="section-title">
+      <div class="icon" style="background:rgba(59,130,246,0.12);color:var(--accent-blue);">📊</div>
+      <div>
+        <h2>Statistik Simulasi</h2>
+        <p>Ringkasan hasil 5.000 skenario Monte Carlo untuk 30 hari ke depan</p>
+      </div>
+    </div>
+
+    <div class="stats-grid">
+      <div class="stat-card blue">
+        <div class="label">Harga Awal</div>
+        <div class="value blue" data-animate data-value="209.65" data-prefix="$" data-suffix="" data-decimals="2">$0.00</div>
+        <div class="sub">Harga terakhir 20 Juni 2024</div>
+      </div>
+      <div class="stat-card green">
+        <div class="label">Harga Rata-rata Akhir</div>
+        <div class="value green" data-animate data-value="216.68" data-prefix="$" data-suffix="" data-decimals="2">$0.00</div>
+        <div class="sub">Prediksi setelah 30 hari</div>
+      </div>
+      <div class="stat-card purple">
+        <div class="label">Probabilitas Naik</div>
+        <div class="value purple" data-animate data-value="61.32" data-prefix="" data-suffix="%" data-decimals="2">0.00%</div>
+        <div class="sub">Peluang harga lebih tinggi</div>
+      </div>
+      <div class="stat-card red">
+        <div class="label">Value at Risk (5%)</div>
+        <div class="value red" data-animate data-value="183.08" data-prefix="$" data-suffix="" data-decimals="2">$0.00</div>
+        <div class="sub">Harga terburuk 5% skenario</div>
+      </div>
+      <div class="stat-card blue">
+        <div class="label">Range Harga Simulasi</div>
+        <div class="value cyan">$147.94 – $316.20</div>
+        <div class="sub">Minimum – Maksimum</div>
+      </div>
+      <div class="stat-card green">
+        <div class="label">Persentil 95%</div>
+        <div class="value green" data-animate data-value="253.68" data-prefix="$" data-suffix="" data-decimals="2">$0.00</div>
+        <div class="sub">Harga terbaik 5% skenario</div>
+      </div>
+    </div>
+
+    <!-- ============ RISK BANNER ============ -->
+    <div class="risk-banner">
+      <div class="risk-icon">⚠️</div>
+      <div class="risk-content">
+        <h3>Jawaban Pertanyaan Simulasi — Analisis Risiko</h3>
+        <div class="risk-value" data-animate data-value="8.98" data-prefix="" data-suffix="%" data-decimals="2">0.00%</div>
+        <p class="risk-desc">
+          Probabilitas harga saham AAPL turun lebih dari 10% dalam 30 hari ke depan.
+          Dari 5.000 skenario, terdapat <strong>449 skenario</strong> dimana harga akhir jatuh di bawah 
+          $188.68 (batas -10%). Risiko ini tergolong <strong>RENDAH</strong>.
+        </p>
+      </div>
+    </div>
+
+    <!-- ============ CHARTS ============ -->
+    <div class="charts-section">
+
+      <div class="section-title">
+        <div class="icon" style="background:rgba(239,68,68,0.12);color:var(--accent-red);">📈</div>
+        <div>
+          <h2>Visualisasi Hasil</h2>
+          <p>Grafik interaktif dari simulasi Monte Carlo dan data historis</p>
+        </div>
+      </div>
+
+      <!-- Chart 1: Risk Histogram -->
+      <div class="chart-container" style="animation-delay:0.1s">
+        <div class="chart-header">
+          <h3>Distribusi Harga Akhir Simulasi (Analisis Risiko)</h3>
+          <span class="badge badge-red">Langkah 3</span>
+        </div>
+        <div class="chart-canvas-wrapper">
+          <canvas id="riskChart"></canvas>
+        </div>
+      </div>
+
+      <!-- Chart 2: Monte Carlo Paths -->
+      <div class="chart-container" style="animation-delay:0.2s">
+        <div class="chart-header">
+          <h3>Jalur Simulasi Monte Carlo (50 Jalur)</h3>
+          <span class="badge badge-blue">Langkah 2</span>
+        </div>
+        <div class="chart-canvas-wrapper">
+          <canvas id="monteCarloChart"></canvas>
+        </div>
+      </div>
+
+      <!-- Chart 3: Return Distribution -->
+      <div class="chart-container" style="animation-delay:0.3s">
+        <div class="chart-header">
+          <h3>Distribusi Return Harian — Identifikasi Distribusi</h3>
+          <span class="badge badge-green">Langkah 1</span>
+        </div>
+        <div class="chart-canvas-wrapper">
+          <canvas id="returnChart"></canvas>
+        </div>
+      </div>
+
+      <!-- Chart 4: Historical Price -->
+      <div class="chart-container" style="animation-delay:0.4s">
+        <div class="chart-header">
+          <h3>Pergerakan Harga Historis AAPL (60 Hari Terakhir)</h3>
+          <span class="badge badge-blue">Data Historis</span>
+        </div>
+        <div class="chart-canvas-wrapper">
+          <canvas id="priceChart"></canvas>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ============ METHODOLOGY ============ -->
+    <div class="section-title">
+      <div class="icon" style="background:rgba(139,92,246,0.12);color:var(--accent-purple);">🔬</div>
+      <div>
+        <h2>Metodologi</h2>
+        <p>Parameter dan rumus yang digunakan dalam simulasi</p>
+      </div>
+    </div>
+
+    <div class="info-grid">
+      <div class="info-card">
+        <h3>📐 Parameter dari Data Historis</h3>
+        <div class="table-wrapper">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Parameter</th>
+                <th>Nilai</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>Dataset</td><td>Apple (AAPL) dari Kaggle</td></tr>
+              <tr><td>Periode Data</td><td>2015-01-02 s/d 2024-06-20</td></tr>
+              <tr><td>Jumlah Data Return</td><td>2.381</td></tr>
+              <tr><td>Mean (μ) Return Harian</td><td>0.001068</td></tr>
+              <tr><td>Std Dev (σ) Return</td><td>0.018171</td></tr>
+              <tr><td>Distribusi</td><td>Normal</td></tr>
+              <tr><td>Harga Terakhir</td><td>$209.65</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="info-card">
+        <h3>⚙️ Konfigurasi Simulasi</h3>
+        <div class="formula">P<sub>t</sub> = P<sub>t-1</sub> × (1 + r<sub>acak</sub>)</div>
+        <div class="formula">r<sub>acak</sub> ~ N(μ = 0.001068, σ = 0.018171)</div>
+        <ul>
+          <li>Jumlah skenario: <strong>5.000 iterasi</strong></li>
+          <li>Horizon simulasi: <strong>30 hari perdagangan</strong></li>
+          <li>Generator: <strong>np.random.normal(μ, σ)</strong></li>
+          <li>Seed: <strong>42</strong> (reprodusibilitas)</li>
+          <li>Proteksi harga negatif: <strong>max(faktor, 0.000001)</strong></li>
+        </ul>
+      </div>
+
+      <div class="info-card">
+        <h3>📏 Rumus Probabilitas Risiko</h3>
+        <div class="formula">P(turun &gt;10%) = Jumlah(harga_akhir &lt; 0.9 × harga_awal) ÷ Total skenario</div>
+        <ul>
+          <li>Batas risiko: <strong>$209.65 × 0.90 = $188.68</strong></li>
+          <li>Skenario turun &gt;10%: <strong>449 dari 5.000</strong></li>
+          <li>Probabilitas: <strong>449 ÷ 5.000 = 8.98%</strong></li>
+          <li>Kategori risiko: <strong>RENDAH (&lt;10%)</strong></li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- ============ CONCLUSION ============ -->
+    <div class="conclusion-box">
+      <h3>✅ Kesimpulan</h3>
+      <p>
+        Berdasarkan simulasi Monte Carlo dengan <span class="highlight">5.000 skenario</span> menggunakan data historis 
+        saham Apple (AAPL) periode 2015–2024, diperoleh bahwa probabilitas harga saham turun lebih dari 10% 
+        dalam 30 hari perdagangan ke depan adalah <span class="highlight-red">8.98%</span>. 
+        Risiko ini tergolong <span class="highlight">RENDAH</span> (&lt;10%), menunjukkan bahwa saham AAPL 
+        relatif stabil dalam jangka pendek. Rata-rata harga akhir simulasi sebesar 
+        <span class="highlight">$216.68</span> (naik 3.35% dari harga awal $209.65) dengan probabilitas 
+        harga naik sebesar <span class="highlight">61.32%</span>.
+      </p>
+    </div>
+
+    <!-- ============ FOOTER ============ -->
+    <footer>
+      <p>
+        TA-03 Pemodelan &amp; Simulasi — Data-Driven Monte Carlo Simulation<br>
+        <a href="https://github.com/rizkihsn/TA03_Simulasi_Saham_AAPL" target="_blank">GitHub Repository</a>
+      </p>
+    </footer>
+
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,32 @@
+# TA-03: Data-Driven Monte Carlo Simulation — Saham AAPL
+
+## 📌 Deskripsi
+Simulasi Monte Carlo berbasis data historis untuk memprediksi pergerakan harga saham Apple (AAPL) dan menghitung probabilitas penurunan harga lebih dari 10% dalam 30 hari ke depan.
+
+## 📊 Hasil Utama
+- **Probabilitas turun >10% dalam 30 hari: 8.98%** (Risiko RENDAH)
+- Harga awal: $209.65
+- Rata-rata harga akhir simulasi: $216.68
+- Jumlah simulasi: 5.000 skenario
+- Distribusi: Normal (μ = 0.001068, σ = 0.018171)
+
+## 📁 Struktur File
+```
+├── AAPL_stock_data.csv              # Dataset Kaggle (Historical Stock Price)
+├── TA03_ModSim_Simulasi_Saham_AAPL.ipynb  # Jupyter Notebook (kode lengkap)
+├── data_aapl_final.csv              # Data bersih hasil cleaning
+├── hasil_simulasi_monte_carlo.csv   # Hasil 5.000 simulasi
+├── index.html                       # Web Dashboard (deploy Vercel)
+├── style.css                        # Stylesheet dashboard
+├── script.js                        # Logic & data chart
+├── vercel.json                      # Konfigurasi deploy Vercel
+└── README.md
+```
+
+## 🚀 Deployment
+Aplikasi web di-deploy ke Vercel: [Link Deploy Vercel]
+
+## 🛠️ Teknologi
+- **Python**: pandas, numpy, matplotlib
+- **Web**: HTML, CSS, JavaScript, Chart.js
+- **Deploy**: Vercel (static site)
