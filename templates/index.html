@@ -11,7 +11,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&family=Syne:wght@700;800;900&display=swap" rel="stylesheet">
   
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="../static/style.css">
   
   <!-- Chart.js & Plugins -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
@@ -22,10 +22,17 @@
   <!-- ================= TOP NAV BAR ================= -->
   <nav class="agency-nav" id="topNav">
     <div class="nav-left">
-      <!-- Stylized Antler Geometric Emblem Logo -->
+      <!-- Original Custom Logo: AAPL Stochastic Bell Curve & Candlestick Leaf -->
       <a href="#hero" class="nav-logo" aria-label="Home">
-        <svg class="logo-antler" viewBox="0 0 48 36" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M4 6 C 14 10, 18 20, 24 32 C 30 20, 34 10, 44 6 C 36 8, 30 14, 28 20 C 26 12, 34 4, 38 2 C 28 6, 25 12, 24 16 C 23 12, 20 6, 10 2 C 14 4, 22 12, 20 20 C 18 14, 12 8, 4 6 Z" fill="currentColor"/>
+        <svg class="logo-custom-stochastic" viewBox="0 0 42 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <!-- Stochastic Gaussian Distribution Bell Curve -->
+          <path d="M4 30 C 14 30, 16 12, 21 6 C 26 12, 28 30, 38 30" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+          <!-- Inner Harmonic Variance Curve -->
+          <path d="M10 29 C 16 29, 18 18, 21 14 C 24 18, 26 29, 32 29" stroke="currentColor" stroke-width="1.6" stroke-opacity="0.35" stroke-linecap="round"/>
+          <!-- Central Asset Node (P0) -->
+          <circle cx="21" cy="6" r="3.2" fill="currentColor"/>
+          <!-- Upward Volatility Vector -->
+          <path d="M21 2 C 24 0.5, 27 2.2, 28 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
         </svg>
         <span class="logo-text">TA-03 // AAPL</span>
       </a>
@@ -39,10 +46,14 @@
     </div>
 
     <div class="nav-right">
+      <!-- Original Custom Analytics Menu Trigger -->
       <a href="#methodology" class="menu-trigger">
         <span class="menu-label">Menu</span>
-        <svg class="diamond-icon" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <rect x="10" y="1" width="12" height="12" rx="2" transform="rotate(45 10 1)" stroke="currentColor" stroke-width="1.8"/>
+        <svg class="menu-icon-custom" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <line x1="3" y1="7" x2="21" y2="7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          <line x1="9" y1="12" x2="21" y2="12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          <line x1="3" y1="17" x2="21" y2="17" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          <circle cx="4.5" cy="12" r="2.2" fill="currentColor"/>
         </svg>
       </a>
     </div>
@@ -54,44 +65,54 @@
 
     <div class="hero-inner">
       
-      <!-- Stage with Monte, Torus in the center, Circle button on the right, and Carlo below -->
+      <!-- Stage with Monte, Custom 3D Volatility Gyroscope, Adjusted Run Simulation Button, and Carlo -->
       <div class="hero-typography-stage">
         
         <h1 class="giant-headline text-left">Monte</h1>
 
-        <!-- 3D Glossy Metallic Torus Element (Centered) -->
+        <!-- Original Custom 3D Metallic Volatility Gyroscope & Stochastic Orbit (SVG) -->
         <div class="torus-container" id="torus3D">
           <svg class="torus-svg" viewBox="0 0 340 340" fill="none" xmlns="http://www.w3.org/2000/svg">
             <defs>
-              <linearGradient id="chromeGrad1" x1="0%" y1="0%" x2="100%" y2="100%">
+              <linearGradient id="chromeRing1" x1="0%" y1="0%" x2="100%" y2="100%">
                 <stop offset="0%" stop-color="#ffffff" stop-opacity="0.95"/>
-                <stop offset="25%" stop-color="#4a4a55" stop-opacity="0.9"/>
-                <stop offset="50%" stop-color="#141418" stop-opacity="0.98"/>
-                <stop offset="75%" stop-color="#3a3a44" stop-opacity="0.9"/>
-                <stop offset="100%" stop-color="#08080a" stop-opacity="1"/>
+                <stop offset="25%" stop-color="#4a4d5a" stop-opacity="0.9"/>
+                <stop offset="50%" stop-color="#14151a" stop-opacity="0.98"/>
+                <stop offset="75%" stop-color="#606575" stop-opacity="0.9"/>
+                <stop offset="100%" stop-color="#0a0b0e" stop-opacity="1"/>
               </linearGradient>
-              <linearGradient id="chromeGrad2" x1="100%" y1="0%" x2="0%" y2="100%">
-                <stop offset="0%" stop-color="#e0e0ea" stop-opacity="0.8"/>
-                <stop offset="30%" stop-color="#22222a" stop-opacity="0.9"/>
-                <stop offset="70%" stop-color="#0a0a0d" stop-opacity="0.95"/>
-                <stop offset="100%" stop-color="#606070" stop-opacity="0.7"/>
+              <linearGradient id="chromeRing2" x1="100%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" stop-color="#e2e8f0" stop-opacity="0.85"/>
+                <stop offset="35%" stop-color="#1e2129" stop-opacity="0.95"/>
+                <stop offset="70%" stop-color="#0b0c10" stop-opacity="0.98"/>
+                <stop offset="100%" stop-color="#717a8f" stop-opacity="0.8"/>
               </linearGradient>
-              <filter id="metallicGlow" x="-20%" y="-20%" width="140%" height="140%">
-                <feGaussianBlur stdDeviation="14" result="blur"/>
+              <radialGradient id="coreGlow" cx="40%" cy="40%" r="60%">
+                <stop offset="0%" stop-color="#ffffff" stop-opacity="0.95"/>
+                <stop offset="30%" stop-color="#555a68" stop-opacity="0.8"/>
+                <stop offset="70%" stop-color="#16181f" stop-opacity="0.95"/>
+                <stop offset="100%" stop-color="#060709" stop-opacity="1"/>
+              </radialGradient>
+              <filter id="metalGlow" x="-20%" y="-20%" width="140%" height="140%">
+                <feGaussianBlur stdDeviation="10" result="blur"/>
                 <feComposite in="SourceGraphic" in2="blur" operator="over"/>
               </filter>
             </defs>
 
-            <!-- Outer Tilted Diamond Loop -->
-            <rect x="170" y="45" width="175" height="175" rx="36" transform="rotate(45 170 45)" stroke="url(#chromeGrad1)" stroke-width="32" filter="url(#metallicGlow)"/>
-            <!-- Inner Specular Cutout Rim -->
-            <rect x="170" y="70" width="140" height="140" rx="24" transform="rotate(45 170 70)" stroke="url(#chromeGrad2)" stroke-width="12" opacity="0.85"/>
-            <!-- Center Core Glow -->
-            <circle cx="170" cy="170" r="18" fill="white" opacity="0.35" filter="blur(8px)"/>
+            <!-- Outer Stochastic Horizon Ring -->
+            <ellipse cx="170" cy="170" rx="142" ry="76" transform="rotate(-28 170 170)" stroke="url(#chromeRing1)" stroke-width="18" filter="url(#metalGlow)"/>
+            <!-- Intersecting Variance Gyro Orbit -->
+            <ellipse cx="170" cy="170" rx="126" ry="62" transform="rotate(38 170 170)" stroke="url(#chromeRing2)" stroke-width="12" opacity="0.9"/>
+            <!-- Central Asset Metallic Sphere Core ($P_0$ Anchor) -->
+            <circle cx="170" cy="170" r="48" fill="url(#coreGlow)" stroke="#383c48" stroke-width="2.5"/>
+            <!-- Specular Lighting Nodes -->
+            <circle cx="152" cy="150" r="10" fill="#ffffff" opacity="0.75" filter="blur(3px)"/>
+            <circle cx="270" cy="115" r="5" fill="#38bdf8" opacity="0.9" filter="blur(2px)"/>
+            <circle cx="70" cy="225" r="4.5" fill="#ff3344" opacity="0.85" filter="blur(2px)"/>
           </svg>
         </div>
 
-        <!-- Floating Circular Action Button (Signature Digital Cover) -->
+        <!-- Floating Circular Action Button (Moved UP safely above Carlo) -->
         <a href="#simulationSection" class="circle-action-btn" id="runSimBtn">
           <div class="circle-arrow">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -141,38 +162,38 @@
     <div class="agency-marquee">
       <div class="marquee-track">
         <span>APPLE INC. (NASDAQ: AAPL)</span>
-        <span class="diamond-sep">◇</span>
+        <span class="bullet-sep">•</span>
         <span>INITIAL PRICE $209.65 USD</span>
-        <span class="diamond-sep">◇</span>
+        <span class="bullet-sep">•</span>
         <span>5,000 MONTE CARLO ITERATIONS</span>
-        <span class="diamond-sep">◇</span>
+        <span class="bullet-sep">•</span>
         <span>P(LOSS &gt; 10%) = 8.98% [LOW RISK]</span>
-        <span class="diamond-sep">◇</span>
+        <span class="bullet-sep">•</span>
         <span>DAILY DRIFT μ = +0.1068%</span>
-        <span class="diamond-sep">◇</span>
+        <span class="bullet-sep">•</span>
         <span>VOLATILITY σ = 1.8171%</span>
-        <span class="diamond-sep">◇</span>
+        <span class="bullet-sep">•</span>
         <span>GAUSSIAN NORMAL RETURN FIT</span>
-        <span class="diamond-sep">◇</span>
+        <span class="bullet-sep">•</span>
         <span>VaR 95% = $183.08</span>
-        <span class="diamond-sep">◇</span>
+        <span class="bullet-sep">•</span>
         <!-- Duplicated for seamless loop -->
         <span>APPLE INC. (NASDAQ: AAPL)</span>
-        <span class="diamond-sep">◇</span>
+        <span class="bullet-sep">•</span>
         <span>INITIAL PRICE $209.65 USD</span>
-        <span class="diamond-sep">◇</span>
+        <span class="bullet-sep">•</span>
         <span>5,000 MONTE CARLO ITERATIONS</span>
-        <span class="diamond-sep">◇</span>
+        <span class="bullet-sep">•</span>
         <span>P(LOSS &gt; 10%) = 8.98% [LOW RISK]</span>
-        <span class="diamond-sep">◇</span>
+        <span class="bullet-sep">•</span>
         <span>DAILY DRIFT μ = +0.1068%</span>
-        <span class="diamond-sep">◇</span>
+        <span class="bullet-sep">•</span>
         <span>VOLATILITY σ = 1.8171%</span>
-        <span class="diamond-sep">◇</span>
+        <span class="bullet-sep">•</span>
         <span>GAUSSIAN NORMAL RETURN FIT</span>
-        <span class="diamond-sep">◇</span>
+        <span class="bullet-sep">•</span>
         <span>VaR 95% = $183.08</span>
-        <span class="diamond-sep">◇</span>
+        <span class="bullet-sep">•</span>
       </div>
     </div>
   </header>
@@ -422,16 +443,16 @@
 
           <div class="spec-list">
             <div class="spec-item">
-              <span class="spec-bullet">◇</span>
+              <span class="spec-bullet">•</span>
               <span><strong>5.000 Iterasi:</strong> Sampel acak masif guna menjamin konvergensi hukum bilangan besar (LLN).</span>
             </div>
             <div class="spec-item">
-              <span class="spec-bullet">◇</span>
+              <span class="spec-bullet">•</span>
               <span><strong>Horizon 30 Hari:</strong> Periode prediksi 30 hari bursa ke depan.</span>
             </div>
             <div class="spec-item">
-              <span class="spec-bullet">◇</span>
-              <span><strong>Kriteria Ekstrem:</strong> Kerugian > 10% terjadi bila harga akhir &lt; $188.68.</span>
+              <span class="spec-bullet">•</span>
+              <span><strong>Kriteria Ekstrem:</strong> Kerugian &gt; 10% terjadi bila harga akhir &lt; $188.68.</span>
             </div>
           </div>
         </div>
@@ -460,7 +481,7 @@
   <footer class="agency-footer">
     <div class="footer-top">
       <div class="footer-big-brand">Monte Carlo</div>
-      <div class="footer-diamond-icon">◇</div>
+      <div class="footer-diamond-icon">•</div>
     </div>
 
     <div class="footer-bottom">
@@ -483,11 +504,11 @@
     </div>
 
     <div class="footer-copyright">
-      <span>&copy; 2026 TA-03 Monte Carlo AAPL. Digital Cover Aesthetic.</span>
+      <span>&copy; 2026 TA-03 Monte Carlo AAPL. Custom Design.</span>
       <a href="#hero" class="back-to-top">Back to top ↑</a>
     </div>
   </footer>
 
-  <script src="script.js"></script>
+  <script src="../static/script.js"></script>
 </body>
 </html>

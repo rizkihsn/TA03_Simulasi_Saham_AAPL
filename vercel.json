@@ -1,8 +1,8 @@
 {
-  "buildCommand": "",
-  "outputDirectory": ".",
-  "framework": null,
   "rewrites": [
-    { "source": "/(.*)", "destination": "/index.html" }
+    { "source": "/", "destination": "/templates/index.html" },
+    { "source": "/index.html", "destination": "/templates/index.html" },
+    { "source": "/static/(.*)", "destination": "/static/$1" },
+    { "source": "/templates/(.*)", "destination": "/templates/$1" }
   ]
 }
