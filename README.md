@@ -30,7 +30,7 @@ Simulasi Monte Carlo berbasis data historis untuk memprediksi pergerakan harga s
 ```
 
 ## 🚀 Deployment
-Aplikasi web di-deploy ke Vercel: [Link Deploy Vercel]
+Aplikasi web di-deploy ke Vercel: https://ta03-simulasi-saham-aapl.vercel.app/ 
 
 ## 🛠️ Teknologi
 - **Python**: pandas, numpy, matplotlib
