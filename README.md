@@ -13,9 +13,13 @@ Simulasi Monte Carlo berbasis data historis untuk memprediksi pergerakan harga s
 ## 📁 Struktur File
 ```
 ├── AAPL_stock_data.csv              # Dataset Kaggle (Historical Stock Price)
-├── TA03_ModSim_Simulasi_Saham_AAPL.ipynb  # Jupyter Notebook (kode lengkap)
+├── TA03_ModSim_Simulasi_Saham_AAPL.ipynb  # Jupyter Notebook (kode & visualisasi lengkap)
 ├── data_aapl_final.csv              # Data bersih hasil cleaning
-├── hasil_simulasi_monte_carlo.csv   # Hasil 5.000 simulasi
+├── hasil_simulasi/                  # Folder output hasil run notebook
+│   ├── analisis_risiko_notebook.png    # Grafik analisis risiko (VaR)
+│   ├── histogram_return_notebook.png   # Histogram fitting distribusi return
+│   ├── jalur_monte_carlo_notebook.png  # Grafik 100 jalur simulasi Monte Carlo
+│   └── hasil_simulasi_monte_carlo.csv  # Output data 5.000 skenario simulasi
 ├── index.html                       # Web Dashboard (deploy Vercel)
 ├── style.css                        # Stylesheet dashboard
 ├── script.js                        # Logic & data chart
