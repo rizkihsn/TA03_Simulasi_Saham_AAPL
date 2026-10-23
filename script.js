@@ -1,5 +1,5 @@
 // ============================================================
-// DATA HASIL SIMULASI MONTE CARLO (dari Python)
+// DATA & PARAMETER EMPIRIS SIMULASI MONTE CARLO SAHAM AAPL
 // ============================================================
 const CONFIG = {
   hargaAwal: 209.65,
@@ -19,7 +19,7 @@ const HASIL = {
   persentil5: 183.08,
   persentil95: 253.68,
   probabilitasNaik: 61.32,
-  batasRisiko: 209.65 * 0.9, // 188.685
+  batasRisiko: 209.65 * 0.9, // $188.685
   jumlahRugiEkstrem: 449,
   probabilitasRugi: 8.98,
 };
@@ -61,11 +61,14 @@ const HARGA_HISTORIS = [
 ];
 
 // ============================================================
-// CHART.JS SETUP
+// GLOBAL CHART.JS CONFIG (DARK LUXURY THEME)
 // ============================================================
-Chart.defaults.color = '#94a3b8';
-Chart.defaults.borderColor = 'rgba(255,255,255,0.04)';
-Chart.defaults.font.family = "'Inter', sans-serif";
+Chart.defaults.color = '#80808e';
+Chart.defaults.borderColor = 'rgba(255, 255, 255, 0.05)';
+Chart.defaults.font.family = "'Space Mono', monospace";
+Chart.defaults.font.size = 11;
+
+let mcChartInstance = null;
 
 // ============================================================
 // 1. CHART: Distribusi Harga Akhir Simulasi (Risk Analysis)
@@ -75,10 +78,10 @@ function createRiskChart() {
   const batas = HASIL.batasRisiko;
 
   const bgColors = HIST_HARGA.labels.map(v =>
-    v < batas ? 'rgba(239, 68, 68, 0.7)' : 'rgba(59, 130, 246, 0.55)'
+    v < batas ? 'rgba(255, 51, 68, 0.85)' : 'rgba(255, 255, 255, 0.28)'
   );
   const borderColors = HIST_HARGA.labels.map(v =>
-    v < batas ? 'rgba(239, 68, 68, 0.9)' : 'rgba(59, 130, 246, 0.8)'
+    v < batas ? '#ff3344' : 'rgba(255, 255, 255, 0.65)'
   );
 
   new Chart(ctx, {
@@ -102,15 +105,15 @@ function createRiskChart() {
       plugins: {
         legend: { display: false },
         tooltip: {
-          backgroundColor: 'rgba(17, 24, 39, 0.95)',
-          titleColor: '#f1f5f9',
-          bodyColor: '#94a3b8',
-          borderColor: 'rgba(255,255,255,0.1)',
+          backgroundColor: '#0a0a0e',
+          titleColor: '#ffffff',
+          bodyColor: '#d1d5db',
+          borderColor: 'rgba(255, 255, 255, 0.2)',
           borderWidth: 1,
           padding: 12,
-          cornerRadius: 8,
+          cornerRadius: 6,
           callbacks: {
-            title: (items) => 'Harga: ' + items[0].label,
+            title: (items) => 'Harga Akhir: ' + items[0].label,
             label: (item) => 'Frekuensi: ' + item.raw + ' skenario',
           }
         },
@@ -120,17 +123,17 @@ function createRiskChart() {
               type: 'line',
               xMin: HIST_HARGA.labels.findIndex(v => v >= batas) - 0.5,
               xMax: HIST_HARGA.labels.findIndex(v => v >= batas) - 0.5,
-              borderColor: 'rgba(239, 68, 68, 0.9)',
-              borderWidth: 2.5,
-              borderDash: [8, 4],
+              borderColor: '#ff3344',
+              borderWidth: 2,
+              borderDash: [6, 4],
               label: {
                 display: true,
                 content: 'Batas -10% ($' + batas.toFixed(0) + ')',
                 position: 'start',
-                backgroundColor: 'rgba(239, 68, 68, 0.85)',
+                backgroundColor: 'rgba(255, 51, 68, 0.9)',
                 color: '#fff',
-                font: { size: 11, weight: '600' },
-                padding: { x: 8, y: 4 },
+                font: { size: 10, weight: '700' },
+                padding: { x: 6, y: 3 },
                 borderRadius: 4,
               }
             },
@@ -138,36 +141,33 @@ function createRiskChart() {
               type: 'line',
               xMin: HIST_HARGA.labels.findIndex(v => v >= CONFIG.hargaAwal) - 0.5,
               xMax: HIST_HARGA.labels.findIndex(v => v >= CONFIG.hargaAwal) - 0.5,
-              borderColor: 'rgba(16, 185, 129, 0.9)',
-              borderWidth: 2.5,
+              borderColor: '#10b981',
+              borderWidth: 2,
               borderDash: [4, 4],
               label: {
                 display: true,
-                content: 'Harga awal ($' + CONFIG.hargaAwal.toFixed(0) + ')',
+                content: 'P₀ = $' + CONFIG.hargaAwal.toFixed(0),
                 position: 'end',
-                backgroundColor: 'rgba(16, 185, 129, 0.85)',
+                backgroundColor: 'rgba(16, 185, 129, 0.9)',
                 color: '#fff',
-                font: { size: 11, weight: '600' },
-                padding: { x: 8, y: 4 },
+                font: { size: 10, weight: '700' },
+                padding: { x: 6, y: 3 },
                 borderRadius: 4,
               }
-            },
+            }
           }
         }
       },
       scales: {
         x: {
-          ticks: {
-            maxTicksLimit: 12,
-            font: { size: 10 },
-          },
+          ticks: { maxTicksLimit: 10, font: { size: 10 } },
           grid: { display: false },
-          title: { display: true, text: 'Harga Akhir (USD)', font: { size: 12 } }
+          title: { display: true, text: 'Harga Akhir (USD)', color: '#666', font: { size: 11 } }
         },
         y: {
           beginAtZero: true,
-          grid: { color: 'rgba(255,255,255,0.03)' },
-          title: { display: true, text: 'Frekuensi', font: { size: 12 } }
+          grid: { color: 'rgba(255, 255, 255, 0.04)' },
+          title: { display: true, text: 'Frekuensi Skenario', color: '#666', font: { size: 11 } }
         }
       }
     }
@@ -187,8 +187,8 @@ function createReturnChart() {
       datasets: [{
         label: 'Frekuensi',
         data: HIST_RETURN.counts,
-        backgroundColor: 'rgba(139, 92, 246, 0.5)',
-        borderColor: 'rgba(139, 92, 246, 0.75)',
+        backgroundColor: 'rgba(255, 255, 255, 0.35)',
+        borderColor: 'rgba(255, 255, 255, 0.7)',
         borderWidth: 1,
         borderRadius: 2,
         barPercentage: 1.0,
@@ -201,16 +201,16 @@ function createReturnChart() {
       plugins: {
         legend: { display: false },
         tooltip: {
-          backgroundColor: 'rgba(17, 24, 39, 0.95)',
-          titleColor: '#f1f5f9',
-          bodyColor: '#94a3b8',
-          borderColor: 'rgba(255,255,255,0.1)',
+          backgroundColor: '#0a0a0e',
+          titleColor: '#ffffff',
+          bodyColor: '#d1d5db',
+          borderColor: 'rgba(255, 255, 255, 0.2)',
           borderWidth: 1,
           padding: 12,
-          cornerRadius: 8,
+          cornerRadius: 6,
           callbacks: {
-            title: (items) => 'Return: ' + items[0].label,
-            label: (item) => 'Frekuensi: ' + item.raw + ' hari',
+            title: (items) => 'Return Harian: ' + items[0].label,
+            label: (item) => 'Frekuensi: ' + item.raw + ' hari bursa',
           }
         },
         annotation: {
@@ -219,17 +219,17 @@ function createReturnChart() {
               type: 'line',
               xMin: HIST_RETURN.labels.findIndex(v => v >= CONFIG.meanReturn) - 0.5,
               xMax: HIST_RETURN.labels.findIndex(v => v >= CONFIG.meanReturn) - 0.5,
-              borderColor: 'rgba(245, 158, 11, 0.9)',
-              borderWidth: 2.5,
+              borderColor: '#06b6d4',
+              borderWidth: 2,
               borderDash: [6, 3],
               label: {
                 display: true,
-                content: 'μ = ' + (CONFIG.meanReturn * 100).toFixed(3) + '%',
+                content: 'Mean (μ) = +' + (CONFIG.meanReturn * 100).toFixed(3) + '%',
                 position: 'start',
-                backgroundColor: 'rgba(245, 158, 11, 0.85)',
-                color: '#fff',
-                font: { size: 11, weight: '600' },
-                padding: { x: 8, y: 4 },
+                backgroundColor: 'rgba(6, 182, 212, 0.9)',
+                color: '#000',
+                font: { size: 10, weight: '700' },
+                padding: { x: 6, y: 3 },
                 borderRadius: 4,
               }
             }
@@ -238,17 +238,14 @@ function createReturnChart() {
       },
       scales: {
         x: {
-          ticks: {
-            maxTicksLimit: 10,
-            font: { size: 10 },
-          },
+          ticks: { maxTicksLimit: 9, font: { size: 10 } },
           grid: { display: false },
-          title: { display: true, text: 'Return Harian', font: { size: 12 } }
+          title: { display: true, text: 'Return Harian (%)', color: '#666', font: { size: 11 } }
         },
         y: {
           beginAtZero: true,
-          grid: { color: 'rgba(255,255,255,0.03)' },
-          title: { display: true, text: 'Frekuensi', font: { size: 12 } }
+          grid: { color: 'rgba(255, 255, 255, 0.04)' },
+          title: { display: true, text: 'Frekuensi Hari', color: '#666', font: { size: 11 } }
         }
       }
     }
@@ -263,26 +260,26 @@ function createPriceChart() {
   const prices = HARGA_HISTORIS.map(d => d.price);
   const dates = HARGA_HISTORIS.map(d => d.date);
 
-  const gradient = ctx.createLinearGradient(0, 0, 0, 350);
-  gradient.addColorStop(0, 'rgba(6, 182, 212, 0.25)');
-  gradient.addColorStop(1, 'rgba(6, 182, 212, 0.0)');
+  const gradient = ctx.createLinearGradient(0, 0, 0, 320);
+  gradient.addColorStop(0, 'rgba(255, 255, 255, 0.18)');
+  gradient.addColorStop(1, 'rgba(255, 255, 255, 0.0)');
 
   new Chart(ctx, {
     type: 'line',
     data: {
       labels: dates,
       datasets: [{
-        label: 'Harga AAPL (USD)',
+        label: 'Harga AAPL',
         data: prices,
-        borderColor: 'rgba(6, 182, 212, 0.9)',
+        borderColor: '#ffffff',
         backgroundColor: gradient,
-        borderWidth: 2.5,
+        borderWidth: 2,
         fill: true,
-        tension: 0.3,
+        tension: 0.25,
         pointRadius: 0,
         pointHoverRadius: 6,
-        pointHoverBackgroundColor: '#06b6d4',
-        pointHoverBorderColor: '#fff',
+        pointHoverBackgroundColor: '#ffffff',
+        pointHoverBorderColor: '#000000',
         pointHoverBorderWidth: 2,
       }]
     },
@@ -293,29 +290,26 @@ function createPriceChart() {
       plugins: {
         legend: { display: false },
         tooltip: {
-          backgroundColor: 'rgba(17, 24, 39, 0.95)',
-          titleColor: '#f1f5f9',
-          bodyColor: '#06b6d4',
-          borderColor: 'rgba(255,255,255,0.1)',
+          backgroundColor: '#0a0a0e',
+          titleColor: '#ffffff',
+          bodyColor: '#34d399',
+          borderColor: 'rgba(255, 255, 255, 0.2)',
           borderWidth: 1,
           padding: 12,
-          cornerRadius: 8,
+          cornerRadius: 6,
           callbacks: {
-            label: (item) => 'Harga: $' + item.raw.toFixed(2),
+            label: (item) => 'Close Price: $' + item.raw.toFixed(2) + ' USD',
           }
         }
       },
       scales: {
         x: {
-          ticks: {
-            maxTicksLimit: 8,
-            font: { size: 10 },
-          },
+          ticks: { maxTicksLimit: 8, font: { size: 10 } },
           grid: { display: false },
         },
         y: {
-          grid: { color: 'rgba(255,255,255,0.03)' },
-          title: { display: true, text: 'Harga (USD)', font: { size: 12 } }
+          grid: { color: 'rgba(255, 255, 255, 0.04)' },
+          title: { display: true, text: 'USD ($)', color: '#666', font: { size: 11 } }
         }
       }
     }
@@ -323,17 +317,15 @@ function createPriceChart() {
 }
 
 // ============================================================
-// MONTE CARLO LIVE SIMULATION (Mini version in browser)
+// 4. MONTE CARLO LIVE SIMULATION (50 Stochastic Trajectories)
 // ============================================================
-function createMonteCarloChart() {
-  const ctx = document.getElementById('monteCarloChart').getContext('2d');
-  const numPaths = 50;
-  const numDays = 30;
+function generateMonteCarloDatasets(numPaths = 50, numDays = 30) {
   const mu = CONFIG.meanReturn;
   const sigma = CONFIG.stdReturn;
   const p0 = CONFIG.hargaAwal;
+  const threshold = HASIL.batasRisiko;
 
-  // Simple Box-Muller transform for normal random numbers
+  // Box-Muller normal random generator
   function randn() {
     let u = 0, v = 0;
     while (u === 0) u = Math.random();
@@ -342,39 +334,62 @@ function createMonteCarloChart() {
   }
 
   const datasets = [];
-  const colors = [
-    'rgba(59, 130, 246, 0.25)',
-    'rgba(6, 182, 212, 0.25)',
-    'rgba(139, 92, 246, 0.25)',
-    'rgba(16, 185, 129, 0.25)',
-    'rgba(245, 158, 11, 0.25)',
-  ];
 
   for (let s = 0; s < numPaths; s++) {
     const path = [p0];
     for (let d = 0; d < numDays; d++) {
       const ret = mu + sigma * randn();
-      path.push(path[path.length - 1] * (1 + ret));
+      const nextPrice = path[path.length - 1] * Math.max(0.000001, (1 + ret));
+      path.push(nextPrice);
     }
+
+    const finalPrice = path[path.length - 1];
+    const isRisk = finalPrice < threshold;
+
+    // Stylized path styling: red for drop >10%, white/silver/cyan for positive
+    let pathColor = isRisk 
+      ? 'rgba(255, 51, 68, 0.45)' 
+      : 'rgba(255, 255, 255, 0.22)';
+    let pathWidth = isRisk ? 1.4 : 1.0;
+
     datasets.push({
       data: path,
-      borderColor: colors[s % colors.length],
-      borderWidth: 1.2,
+      borderColor: pathColor,
+      borderWidth: pathWidth,
       pointRadius: 0,
-      tension: 0.2,
+      tension: 0.18,
       fill: false,
     });
   }
 
-  const labels = Array.from({ length: numDays + 1 }, (_, i) => 'Hari ' + i);
+  return datasets;
+}
 
-  new Chart(ctx, {
+function createMonteCarloChart() {
+  const canvas = document.getElementById('monteCarloChart');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const numDays = 30;
+  const p0 = CONFIG.hargaAwal;
+
+  const labels = Array.from({ length: numDays + 1 }, (_, i) => 'Day ' + i);
+  const datasets = generateMonteCarloDatasets(50, numDays);
+
+  if (mcChartInstance) {
+    mcChartInstance.destroy();
+  }
+
+  mcChartInstance = new Chart(ctx, {
     type: 'line',
     data: { labels, datasets },
     options: {
       responsive: true,
       maintainAspectRatio: false,
       interaction: { intersect: false },
+      animation: {
+        duration: 900,
+        easing: 'easeOutQuart'
+      },
       plugins: {
         legend: { display: false },
         tooltip: { enabled: false },
@@ -384,16 +399,16 @@ function createMonteCarloChart() {
               type: 'line',
               yMin: p0,
               yMax: p0,
-              borderColor: 'rgba(16, 185, 129, 0.7)',
+              borderColor: '#10b981',
               borderWidth: 2,
-              borderDash: [6, 3],
+              borderDash: [6, 4],
               label: {
                 display: true,
-                content: 'Harga Awal $' + p0.toFixed(0),
+                content: 'Start Price ($' + p0.toFixed(2) + ')',
                 position: 'end',
-                backgroundColor: 'rgba(16, 185, 129, 0.8)',
+                backgroundColor: 'rgba(16, 185, 129, 0.9)',
                 color: '#fff',
-                font: { size: 10, weight: '600' },
+                font: { size: 10, weight: '700' },
                 padding: { x: 6, y: 3 },
                 borderRadius: 4,
               }
@@ -402,16 +417,16 @@ function createMonteCarloChart() {
               type: 'line',
               yMin: HASIL.batasRisiko,
               yMax: HASIL.batasRisiko,
-              borderColor: 'rgba(239, 68, 68, 0.7)',
+              borderColor: '#ff3344',
               borderWidth: 2,
-              borderDash: [6, 3],
+              borderDash: [6, 4],
               label: {
                 display: true,
-                content: 'Batas -10%',
+                content: 'Risk Barrier -10% ($' + HASIL.batasRisiko.toFixed(2) + ')',
                 position: 'start',
-                backgroundColor: 'rgba(239, 68, 68, 0.8)',
+                backgroundColor: 'rgba(255, 51, 68, 0.9)',
                 color: '#fff',
-                font: { size: 10, weight: '600' },
+                font: { size: 10, weight: '700' },
                 padding: { x: 6, y: 3 },
                 borderRadius: 4,
               }
@@ -425,8 +440,8 @@ function createMonteCarloChart() {
           grid: { display: false },
         },
         y: {
-          grid: { color: 'rgba(255,255,255,0.03)' },
-          title: { display: true, text: 'Harga (USD)', font: { size: 12 } },
+          grid: { color: 'rgba(255, 255, 255, 0.04)' },
+          title: { display: true, text: 'Simulation Price (USD)', color: '#666', font: { size: 11 } },
         }
       }
     }
@@ -434,14 +449,14 @@ function createMonteCarloChart() {
 }
 
 // ============================================================
-// ANIMATE NUMBERS ON SCROLL
+// ANIMATE NUMBERS ON SCROLL (DIGITAL COVER COUNTER)
 // ============================================================
 function animateValue(el, start, end, duration, prefix, suffix, decimals) {
   let startTime = null;
   function step(timestamp) {
     if (!startTime) startTime = timestamp;
     const progress = Math.min((timestamp - startTime) / duration, 1);
-    const eased = 1 - Math.pow(1 - progress, 3); // ease-out cubic
+    const eased = 1 - Math.pow(1 - progress, 3);
     const current = start + (end - start) * eased;
     el.textContent = prefix + current.toFixed(decimals) + suffix;
     if (progress < 1) requestAnimationFrame(step);
@@ -459,17 +474,49 @@ function initAnimations() {
         const prefix = el.dataset.prefix || '';
         const suffix = el.dataset.suffix || '';
         const decimals = parseInt(el.dataset.decimals || '2');
-        animateValue(el, 0, end, 1200, prefix, suffix, decimals);
+        animateValue(el, 0, end, 1400, prefix, suffix, decimals);
         io.unobserve(el);
       }
     });
-  }, { threshold: 0.3 });
+  }, { threshold: 0.25 });
 
   observers.forEach(el => io.observe(el));
 }
 
 // ============================================================
-// INIT
+// INTERACTIVE EVENT LISTENERS
+// ============================================================
+function setupInteractions() {
+  // Re-Simulate Button
+  const reSimBtn = document.getElementById('reSimulateBtn');
+  if (reSimBtn) {
+    reSimBtn.addEventListener('click', () => {
+      reSimBtn.style.transform = 'scale(0.95)';
+      setTimeout(() => {
+        reSimBtn.style.transform = 'none';
+        createMonteCarloChart();
+      }, 150);
+    });
+  }
+
+  // Hero Run Simulation Circular Button
+  const runSimBtn = document.getElementById('runSimBtn');
+  if (runSimBtn) {
+    runSimBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      const target = document.getElementById('simulationSection');
+      if (target) {
+        target.scrollIntoView({ behavior: 'smooth' });
+        setTimeout(() => {
+          createMonteCarloChart();
+        }, 600);
+      }
+    });
+  }
+}
+
+// ============================================================
+// INITIALIZE
 // ============================================================
 document.addEventListener('DOMContentLoaded', () => {
   createRiskChart();
@@ -477,4 +524,5 @@ document.addEventListener('DOMContentLoaded', () => {
   createPriceChart();
   createMonteCarloChart();
   initAnimations();
+  setupInteractions();
 });

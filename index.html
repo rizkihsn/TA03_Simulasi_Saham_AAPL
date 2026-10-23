@@ -3,230 +3,490 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>TA-03 | Monte Carlo Simulation — Saham AAPL</title>
+  <title>Monte Carlo — AAPL Stock Simulation</title>
   <meta name="description" content="Data-Driven Monte Carlo Simulation untuk forecasting harga saham Apple (AAPL). Analisis risiko probabilitas penurunan harga lebih dari 10% dalam 30 hari ke depan.">
+  
+  <!-- Fonts: Syne (Brutalist Agency Display) + Plus Jakarta Sans + Space Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&family=Syne:wght@700;800;900&display=swap" rel="stylesheet">
+  
   <link rel="stylesheet" href="style.css">
-  <!-- Chart.js -->
+  
+  <!-- Chart.js & Plugins -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
-  <!-- Chart.js Annotation Plugin -->
   <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@3.1.0/dist/chartjs-plugin-annotation.min.js"></script>
 </head>
-<body>
+<body class="dark-theme">
 
-  <!-- Background Animation -->
-  <div class="bg-animation">
-    <div class="orb"></div>
-    <div class="orb"></div>
-    <div class="orb"></div>
-  </div>
-
-  <div class="app-container">
-
-    <!-- ============ HERO ============ -->
-    <header class="hero">
-      <div class="hero-badge">
-        <span class="dot"></span>
-        TA-03 — Pemodelan &amp; Simulasi
-      </div>
-      <h1>Monte Carlo Simulation<br><span>Saham Apple (AAPL)</span></h1>
-      <p class="subtitle">Data-Driven Risk Analysis menggunakan 5.000 skenario simulasi berdasarkan data historis saham Apple</p>
-      <p class="meta-info">Dataset Kaggle • Periode 2015 – Juni 2024 • 2.381 data return harian</p>
-    </header>
-
-    <!-- ============ STAT CARDS ============ -->
-    <div class="section-title">
-      <div class="icon" style="background:rgba(59,130,246,0.12);color:var(--accent-blue);">📊</div>
-      <div>
-        <h2>Statistik Simulasi</h2>
-        <p>Ringkasan hasil 5.000 skenario Monte Carlo untuk 30 hari ke depan</p>
-      </div>
+  <!-- ================= TOP NAV BAR ================= -->
+  <nav class="agency-nav" id="topNav">
+    <div class="nav-left">
+      <!-- Stylized Antler Geometric Emblem Logo -->
+      <a href="#hero" class="nav-logo" aria-label="Home">
+        <svg class="logo-antler" viewBox="0 0 48 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M4 6 C 14 10, 18 20, 24 32 C 30 20, 34 10, 44 6 C 36 8, 30 14, 28 20 C 26 12, 34 4, 38 2 C 28 6, 25 12, 24 16 C 23 12, 20 6, 10 2 C 14 4, 22 12, 20 20 C 18 14, 12 8, 4 6 Z" fill="currentColor"/>
+        </svg>
+        <span class="logo-text">TA-03 // AAPL</span>
+      </a>
     </div>
 
-    <div class="stats-grid">
-      <div class="stat-card blue">
-        <div class="label">Harga Awal</div>
-        <div class="value blue" data-animate data-value="209.65" data-prefix="$" data-suffix="" data-decimals="2">$0.00</div>
-        <div class="sub">Harga terakhir 20 Juni 2024</div>
-      </div>
-      <div class="stat-card green">
-        <div class="label">Harga Rata-rata Akhir</div>
-        <div class="value green" data-animate data-value="216.68" data-prefix="$" data-suffix="" data-decimals="2">$0.00</div>
-        <div class="sub">Prediksi setelah 30 hari</div>
-      </div>
-      <div class="stat-card purple">
-        <div class="label">Probabilitas Naik</div>
-        <div class="value purple" data-animate data-value="61.32" data-prefix="" data-suffix="%" data-decimals="2">0.00%</div>
-        <div class="sub">Peluang harga lebih tinggi</div>
-      </div>
-      <div class="stat-card red">
-        <div class="label">Value at Risk (5%)</div>
-        <div class="value red" data-animate data-value="183.08" data-prefix="$" data-suffix="" data-decimals="2">$0.00</div>
-        <div class="sub">Harga terburuk 5% skenario</div>
-      </div>
-      <div class="stat-card blue">
-        <div class="label">Range Harga Simulasi</div>
-        <div class="value cyan">$147.94 – $316.20</div>
-        <div class="sub">Minimum – Maksimum</div>
-      </div>
-      <div class="stat-card green">
-        <div class="label">Persentil 95%</div>
-        <div class="value green" data-animate data-value="253.68" data-prefix="$" data-suffix="" data-decimals="2">$0.00</div>
-        <div class="sub">Harga terbaik 5% skenario</div>
-      </div>
+    <div class="nav-center">
+      <span class="status-pill">
+        <span class="status-pulse"></span>
+        Monte Carlo Simulation • 5,000 Iterations
+      </span>
     </div>
 
-    <!-- ============ RISK BANNER ============ -->
-    <div class="risk-banner">
-      <div class="risk-icon">⚠️</div>
-      <div class="risk-content">
-        <h3>Jawaban Pertanyaan Simulasi — Analisis Risiko</h3>
-        <div class="risk-value" data-animate data-value="8.98" data-prefix="" data-suffix="%" data-decimals="2">0.00%</div>
-        <p class="risk-desc">
-          Probabilitas harga saham AAPL turun lebih dari 10% dalam 30 hari ke depan.
-          Dari 5.000 skenario, terdapat <strong>449 skenario</strong> dimana harga akhir jatuh di bawah 
-          $188.68 (batas -10%). Risiko ini tergolong <strong>RENDAH</strong>.
+    <div class="nav-right">
+      <a href="#methodology" class="menu-trigger">
+        <span class="menu-label">Menu</span>
+        <svg class="diamond-icon" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="10" y="1" width="12" height="12" rx="2" transform="rotate(45 10 1)" stroke="currentColor" stroke-width="1.8"/>
+        </svg>
+      </a>
+    </div>
+  </nav>
+
+  <!-- ================= HERO SECTION (DIGITAL COVER STYLE) ================= -->
+  <header class="hero-digital" id="hero">
+    <div class="hero-canvas-bg"></div>
+
+    <div class="hero-inner">
+      
+      <!-- Stage with Monte, Torus in the center, Circle button on the right, and Carlo below -->
+      <div class="hero-typography-stage">
+        
+        <h1 class="giant-headline text-left">Monte</h1>
+
+        <!-- 3D Glossy Metallic Torus Element (Centered) -->
+        <div class="torus-container" id="torus3D">
+          <svg class="torus-svg" viewBox="0 0 340 340" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="chromeGrad1" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#ffffff" stop-opacity="0.95"/>
+                <stop offset="25%" stop-color="#4a4a55" stop-opacity="0.9"/>
+                <stop offset="50%" stop-color="#141418" stop-opacity="0.98"/>
+                <stop offset="75%" stop-color="#3a3a44" stop-opacity="0.9"/>
+                <stop offset="100%" stop-color="#08080a" stop-opacity="1"/>
+              </linearGradient>
+              <linearGradient id="chromeGrad2" x1="100%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" stop-color="#e0e0ea" stop-opacity="0.8"/>
+                <stop offset="30%" stop-color="#22222a" stop-opacity="0.9"/>
+                <stop offset="70%" stop-color="#0a0a0d" stop-opacity="0.95"/>
+                <stop offset="100%" stop-color="#606070" stop-opacity="0.7"/>
+              </linearGradient>
+              <filter id="metallicGlow" x="-20%" y="-20%" width="140%" height="140%">
+                <feGaussianBlur stdDeviation="14" result="blur"/>
+                <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+              </filter>
+            </defs>
+
+            <!-- Outer Tilted Diamond Loop -->
+            <rect x="170" y="45" width="175" height="175" rx="36" transform="rotate(45 170 45)" stroke="url(#chromeGrad1)" stroke-width="32" filter="url(#metallicGlow)"/>
+            <!-- Inner Specular Cutout Rim -->
+            <rect x="170" y="70" width="140" height="140" rx="24" transform="rotate(45 170 70)" stroke="url(#chromeGrad2)" stroke-width="12" opacity="0.85"/>
+            <!-- Center Core Glow -->
+            <circle cx="170" cy="170" r="18" fill="white" opacity="0.35" filter="blur(8px)"/>
+          </svg>
+        </div>
+
+        <!-- Floating Circular Action Button (Signature Digital Cover) -->
+        <a href="#simulationSection" class="circle-action-btn" id="runSimBtn">
+          <div class="circle-arrow">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="7" y1="17" x2="17" y2="7"></line>
+              <polyline points="7 7 17 7 17 17"></polyline>
+            </svg>
+          </div>
+          <span class="circle-btn-text">Run Simulation</span>
+        </a>
+
+        <h1 class="giant-headline text-right">Carlo</h1>
+
+      </div>
+
+      <!-- Hero Bottom Footer Subtitle: 4-Line Editorial Layout -->
+      <div class="hero-bottom-desc">
+        <p class="agency-tagline">
+          The empirical model<br>
+          that covers market risk<br>
+          in a data-driven<br>
+          and stochastic way
         </p>
+
+        <div class="hero-quick-stats">
+          <div class="quick-stat-item">
+            <span class="qs-label">TICKER</span>
+            <span class="qs-val">AAPL</span>
+          </div>
+          <div class="quick-stat-item">
+            <span class="qs-label">START PRICE</span>
+            <span class="qs-val">$209.65</span>
+          </div>
+          <div class="quick-stat-item">
+            <span class="qs-label">HORIZON</span>
+            <span class="qs-val">30 DAYS</span>
+          </div>
+          <div class="quick-stat-item">
+            <span class="qs-label">RISK PROBABILITY</span>
+            <span class="qs-val highlight-red">8.98%</span>
+          </div>
+        </div>
       </div>
+
     </div>
 
-    <!-- ============ CHARTS ============ -->
-    <div class="charts-section">
+    <!-- Infinite Scrolling Ticker (Marquee) -->
+    <div class="agency-marquee">
+      <div class="marquee-track">
+        <span>APPLE INC. (NASDAQ: AAPL)</span>
+        <span class="diamond-sep">◇</span>
+        <span>INITIAL PRICE $209.65 USD</span>
+        <span class="diamond-sep">◇</span>
+        <span>5,000 MONTE CARLO ITERATIONS</span>
+        <span class="diamond-sep">◇</span>
+        <span>P(LOSS &gt; 10%) = 8.98% [LOW RISK]</span>
+        <span class="diamond-sep">◇</span>
+        <span>DAILY DRIFT μ = +0.1068%</span>
+        <span class="diamond-sep">◇</span>
+        <span>VOLATILITY σ = 1.8171%</span>
+        <span class="diamond-sep">◇</span>
+        <span>GAUSSIAN NORMAL RETURN FIT</span>
+        <span class="diamond-sep">◇</span>
+        <span>VaR 95% = $183.08</span>
+        <span class="diamond-sep">◇</span>
+        <!-- Duplicated for seamless loop -->
+        <span>APPLE INC. (NASDAQ: AAPL)</span>
+        <span class="diamond-sep">◇</span>
+        <span>INITIAL PRICE $209.65 USD</span>
+        <span class="diamond-sep">◇</span>
+        <span>5,000 MONTE CARLO ITERATIONS</span>
+        <span class="diamond-sep">◇</span>
+        <span>P(LOSS &gt; 10%) = 8.98% [LOW RISK]</span>
+        <span class="diamond-sep">◇</span>
+        <span>DAILY DRIFT μ = +0.1068%</span>
+        <span class="diamond-sep">◇</span>
+        <span>VOLATILITY σ = 1.8171%</span>
+        <span class="diamond-sep">◇</span>
+        <span>GAUSSIAN NORMAL RETURN FIT</span>
+        <span class="diamond-sep">◇</span>
+        <span>VaR 95% = $183.08</span>
+        <span class="diamond-sep">◇</span>
+      </div>
+    </div>
+  </header>
 
-      <div class="section-title">
-        <div class="icon" style="background:rgba(239,68,68,0.12);color:var(--accent-red);">📈</div>
-        <div>
-          <h2>Visualisasi Hasil</h2>
-          <p>Grafik interaktif dari simulasi Monte Carlo dan data historis</p>
+  <!-- ================= MAIN CONTENT ================= -->
+  <main class="agency-main">
+
+    <!-- ============ SECTION 01: THE CORE RISK STATEMENT ============ -->
+    <section class="section-risk-featured" id="riskSection">
+      <div class="section-badge">01 // RISK ASSESSMENT (TA-03 CORE GOAL)</div>
+      
+      <div class="risk-display-grid">
+        <div class="risk-main-box">
+          <div class="risk-tag">SIMULATION CONCLUSION</div>
+          <div class="risk-massive-number" data-animate data-value="8.98" data-prefix="" data-suffix="%" data-decimals="2">
+            8.98%
+          </div>
+          <div class="risk-category-badge low-risk">
+            <span class="badge-dot"></span>
+            RISIKO TERGOLONG RENDAH (&lt; 10%)
+          </div>
+        </div>
+
+        <div class="risk-explanation-box">
+          <h2 class="editorial-heading">Berapa probabilitas harga saham AAPL akan turun lebih dari 10% dalam 30 hari ke depan?</h2>
+          <p class="risk-narrative">
+            Dari total <strong>5.000 skenario simulasi Monte Carlo</strong>, terdapat 
+            <strong>449 skenario</strong> di mana harga akhir saham jatuh di bawah 
+            <strong>$188.68</strong> (level penurunan 10% dari harga penutupan awal $209.65).
+          </p>
+          <div class="risk-formula-callout">
+            <span class="formula-label">FORMULA</span>
+            <code>P(turun &gt; 10%) = 449 / 5.000 = 8.98%</code>
+          </div>
+          <p class="risk-footnote">
+            Berdasarkan metrik risiko pasar keuangan, probabilitas kerugian di bawah 10% dalam jangka waktu 30 hari mengindikasikan stabilitas harga yang relatif solid.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ SECTION 02: EDITORIAL STATS GRID ============ -->
+    <section class="section-stats" id="stats">
+      <div class="section-header-row">
+        <div class="section-badge">02 // STATISTICAL METRICS</div>
+        <span class="section-caption">Hasil Agregat 5.000 Skenario Monte Carlo</span>
+      </div>
+
+      <div class="editorial-grid">
+        
+        <div class="grid-card">
+          <div class="card-num">01</div>
+          <div class="card-label">HARGA AWAL (20 JUNI 2024)</div>
+          <div class="card-val" data-animate data-value="209.65" data-prefix="$" data-suffix="" data-decimals="2">$209.65</div>
+          <div class="card-desc">Harga penutupan terakhir dataset historis Kaggle</div>
+        </div>
+
+        <div class="grid-card">
+          <div class="card-num">02</div>
+          <div class="card-label">RATA-RATA HARGA AKHIR</div>
+          <div class="card-val" data-animate data-value="216.68" data-prefix="$" data-suffix="" data-decimals="2">$216.68</div>
+          <div class="card-desc">+3.35% ekspektasi kenaikan setelah 30 hari</div>
+        </div>
+
+        <div class="grid-card">
+          <div class="card-num">03</div>
+          <div class="card-label">PROBABILITAS HARGA NAIK</div>
+          <div class="card-val accent-green" data-animate data-value="61.32" data-prefix="" data-suffix="%" data-decimals="2">61.32%</div>
+          <div class="card-desc">3.066 dari 5.000 skenario berakhir di atas $209.65</div>
+        </div>
+
+        <div class="grid-card">
+          <div class="card-num">04</div>
+          <div class="card-label">VALUE AT RISK (VaR 5%)</div>
+          <div class="card-val accent-crimson" data-animate data-value="183.08" data-prefix="$" data-suffix="" data-decimals="2">$183.08</div>
+          <div class="card-desc">95% kemungkinan harga berada di atas batas ini</div>
+        </div>
+
+        <div class="grid-card">
+          <div class="card-num">05</div>
+          <div class="card-label">RENTANG HARGA EKSTREM</div>
+          <div class="card-val mono-font">$147.94 – $316.20</div>
+          <div class="card-desc">Minimum ($147.94) hingga Maksimum ($316.20)</div>
+        </div>
+
+        <div class="grid-card">
+          <div class="card-num">06</div>
+          <div class="card-label">PERSENTIL 95% (BEST CASE)</div>
+          <div class="card-val" data-animate data-value="253.68" data-prefix="$" data-suffix="" data-decimals="2">$253.68</div>
+          <div class="card-desc">Harga pada persentil 95% skenario terbaik</div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ============ SECTION 03: INTERACTIVE VISUALIZATIONS ============ -->
+    <section class="section-visuals" id="simulationSection">
+      
+      <div class="section-header-row">
+        <div class="section-badge">03 // VISUAL SIMULATION SUITE</div>
+        <div class="sim-actions-wrapper">
+          <button class="btn-refresh-sim" id="reSimulateBtn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.2"/>
+            </svg>
+            <span>Re-Generate Paths</span>
+          </button>
         </div>
       </div>
 
-      <!-- Chart 1: Risk Histogram -->
-      <div class="chart-container" style="animation-delay:0.1s">
-        <div class="chart-header">
-          <h3>Distribusi Harga Akhir Simulasi (Analisis Risiko)</h3>
-          <span class="badge badge-red">Langkah 3</span>
+      <!-- Chart 1: Monte Carlo Simulation Paths (Showcase) -->
+      <div class="agency-chart-block featured-chart">
+        <div class="chart-top-bar">
+          <div>
+            <span class="chart-step">LANGKAH 2</span>
+            <h3 class="chart-title">Jalur Simulasi Monte Carlo (50 Skenario Acak)</h3>
+          </div>
+          <div class="chart-legend-custom">
+            <span class="leg-item"><span class="leg-color bg-green"></span> Harga Awal ($209.65)</span>
+            <span class="leg-item"><span class="leg-color bg-red"></span> Batas -10% ($188.68)</span>
+          </div>
         </div>
-        <div class="chart-canvas-wrapper">
-          <canvas id="riskChart"></canvas>
-        </div>
-      </div>
-
-      <!-- Chart 2: Monte Carlo Paths -->
-      <div class="chart-container" style="animation-delay:0.2s">
-        <div class="chart-header">
-          <h3>Jalur Simulasi Monte Carlo (50 Jalur)</h3>
-          <span class="badge badge-blue">Langkah 2</span>
-        </div>
-        <div class="chart-canvas-wrapper">
+        <div class="canvas-box canvas-tall">
           <canvas id="monteCarloChart"></canvas>
         </div>
-      </div>
-
-      <!-- Chart 3: Return Distribution -->
-      <div class="chart-container" style="animation-delay:0.3s">
-        <div class="chart-header">
-          <h3>Distribusi Return Harian — Identifikasi Distribusi</h3>
-          <span class="badge badge-green">Langkah 1</span>
-        </div>
-        <div class="chart-canvas-wrapper">
-          <canvas id="returnChart"></canvas>
+        <div class="chart-footer-caption">
+          Visualisasi lintasan stokastik berbasis Geometric Brownian Motion (GBM) selama 30 hari perdagangan ke depan.
         </div>
       </div>
 
-      <!-- Chart 4: Historical Price -->
-      <div class="chart-container" style="animation-delay:0.4s">
-        <div class="chart-header">
-          <h3>Pergerakan Harga Historis AAPL (60 Hari Terakhir)</h3>
-          <span class="badge badge-blue">Data Historis</span>
+      <!-- Grid for Chart 2 & Chart 3 -->
+      <div class="charts-two-col">
+        
+        <!-- Risk Distribution Histogram -->
+        <div class="agency-chart-block">
+          <div class="chart-top-bar">
+            <div>
+              <span class="chart-step">LANGKAH 3</span>
+              <h3 class="chart-title">Distribusi Harga Akhir &amp; Area Risiko</h3>
+            </div>
+            <span class="chart-badge badge-danger">Threshold -10%</span>
+          </div>
+          <div class="canvas-box">
+            <canvas id="riskChart"></canvas>
+          </div>
+          <div class="chart-footer-caption">
+            Kolom merah mewakili 449 skenario yang berada di bawah level penurunan 10%.
+          </div>
         </div>
-        <div class="chart-canvas-wrapper">
+
+        <!-- Daily Returns Distribution -->
+        <div class="agency-chart-block">
+          <div class="chart-top-bar">
+            <div>
+              <span class="chart-step">LANGKAH 1</span>
+              <h3 class="chart-title">Distribusi Return Harian (Fitting Normal)</h3>
+            </div>
+            <span class="chart-badge">2.381 Data Riil</span>
+          </div>
+          <div class="canvas-box">
+            <canvas id="returnChart"></canvas>
+          </div>
+          <div class="chart-footer-caption">
+            Distribusi return historis saham AAPL periode 2015-2024 terbukti mengikuti Distribusi Normal Gauss.
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Chart 4: Historical 60-Day Price Movement -->
+      <div class="agency-chart-block">
+        <div class="chart-top-bar">
+          <div>
+            <span class="chart-step">DATA KAGGLE</span>
+            <h3 class="chart-title">Pergerakan Harga Historis Saham Apple (60 Hari Terakhir)</h3>
+          </div>
+          <span class="chart-badge">Maret – Juni 2024</span>
+        </div>
+        <div class="canvas-box">
           <canvas id="priceChart"></canvas>
         </div>
       </div>
 
-    </div>
+    </section>
 
-    <!-- ============ METHODOLOGY ============ -->
-    <div class="section-title">
-      <div class="icon" style="background:rgba(139,92,246,0.12);color:var(--accent-purple);">🔬</div>
-      <div>
-        <h2>Metodologi</h2>
-        <p>Parameter dan rumus yang digunakan dalam simulasi</p>
+    <!-- ============ SECTION 04: METHODOLOGY & PARAMETERS ============ -->
+    <section class="section-method" id="methodology">
+      <div class="section-header-row">
+        <div class="section-badge">04 // METHODOLOGY &amp; MATHEMATICAL MODEL</div>
+        <span class="section-caption">Parameter Empiris dari Dataset Kaggle</span>
       </div>
-    </div>
 
-    <div class="info-grid">
-      <div class="info-card">
-        <h3>📐 Parameter dari Data Historis</h3>
-        <div class="table-wrapper">
-          <table class="data-table">
-            <thead>
-              <tr>
-                <th>Parameter</th>
-                <th>Nilai</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr><td>Dataset</td><td>Apple (AAPL) dari Kaggle</td></tr>
-              <tr><td>Periode Data</td><td>2015-01-02 s/d 2024-06-20</td></tr>
-              <tr><td>Jumlah Data Return</td><td>2.381</td></tr>
-              <tr><td>Mean (μ) Return Harian</td><td>0.001068</td></tr>
-              <tr><td>Std Dev (σ) Return</td><td>0.018171</td></tr>
-              <tr><td>Distribusi</td><td>Normal</td></tr>
-              <tr><td>Harga Terakhir</td><td>$209.65</td></tr>
-            </tbody>
-          </table>
+      <div class="method-split-grid">
+        
+        <!-- Table Column -->
+        <div class="method-card">
+          <h3 class="card-headline">Parameter Data Historis</h3>
+          <div class="agency-table-wrap">
+            <table class="agency-table">
+              <tbody>
+                <tr>
+                  <td>Sumber Dataset</td>
+                  <td class="text-right font-mono">Apple (AAPL) Kaggle Dataset</td>
+                </tr>
+                <tr>
+                  <td>Periode Analisis</td>
+                  <td class="text-right font-mono">2015-01-02 s/d 2024-06-20</td>
+                </tr>
+                <tr>
+                  <td>Jumlah Data Bersih</td>
+                  <td class="text-right font-mono">2.381 Return Harian</td>
+                </tr>
+                <tr>
+                  <td>Mean Return (μ)</td>
+                  <td class="text-right font-mono">+0.001068 (+0.107%/hari)</td>
+                </tr>
+                <tr>
+                  <td>Volatilitas Return (σ)</td>
+                  <td class="text-right font-mono">0.018171 (1.817%/hari)</td>
+                </tr>
+                <tr>
+                  <td>Identifikasi Distribusi</td>
+                  <td class="text-right font-mono">Distribusi Normal (Gaussian)</td>
+                </tr>
+                <tr>
+                  <td>Harga Basis Awal (P₀)</td>
+                  <td class="text-right font-mono">$209.65 USD</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
+
+        <!-- Formula Column -->
+        <div class="method-card">
+          <h3 class="card-headline">Model Simulasi Stokastik</h3>
+          
+          <div class="math-block">
+            <span class="math-title">PERSAMAAN HARGA KUMULATIF:</span>
+            <div class="math-equation">P<sub>t</sub> = P<sub>t-1</sub> × (1 + r<sub>t</sub>)</div>
+          </div>
+
+          <div class="math-block">
+            <span class="math-title">GENERATOR VARIABEL ACAK:</span>
+            <div class="math-equation">r<sub>t</sub> ~ N(μ = 0.001068, σ = 0.018171)</div>
+          </div>
+
+          <div class="spec-list">
+            <div class="spec-item">
+              <span class="spec-bullet">◇</span>
+              <span><strong>5.000 Iterasi:</strong> Sampel acak masif guna menjamin konvergensi hukum bilangan besar (LLN).</span>
+            </div>
+            <div class="spec-item">
+              <span class="spec-bullet">◇</span>
+              <span><strong>Horizon 30 Hari:</strong> Periode prediksi 30 hari bursa ke depan.</span>
+            </div>
+            <div class="spec-item">
+              <span class="spec-bullet">◇</span>
+              <span><strong>Kriteria Ekstrem:</strong> Kerugian > 10% terjadi bila harga akhir &lt; $188.68.</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ============ SECTION 05: CONCLUSION & SYNTHESIS ============ -->
+    <section class="section-conclusion">
+      <div class="conclusion-inner-card">
+        <div class="conclusion-header">
+          <span class="conclusion-badge">SINTESIS AKHIR</span>
+          <h2 class="conclusion-title">Kesimpulan Analisis Risiko Saham AAPL</h2>
+        </div>
+        <p class="conclusion-body">
+          Berdasarkan simulasi Monte Carlo berbasis data empiris dengan <strong>5.000 skenario</strong> pada horizon <strong>30 hari perdagangan</strong>, ditemukan probabilitas penurunan harga saham Apple Inc. (AAPL) melebihi 10% sebesar <strong class="text-crimson">8.98%</strong>.
+          <br><br>
+          Probabilitas ini berada pada kategori <strong>RISIKO RENDAH (&lt; 10%)</strong>. Sementara itu, probabilitas harga saham mengalami kenaikan adalah <strong>61.32%</strong> dengan estimasi rata-rata harga akhir di level <strong>$216.68</strong>. Model menunjukkan bahwa saham AAPL memiliki ketahanan dan momentum positif dalam horizon jangka pendek.
+        </p>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ================= AGENCY FOOTER ================= -->
+  <footer class="agency-footer">
+    <div class="footer-top">
+      <div class="footer-big-brand">Monte Carlo</div>
+      <div class="footer-diamond-icon">◇</div>
+    </div>
+
+    <div class="footer-bottom">
+      <div class="footer-col">
+        <span class="footer-col-title">PROJECT</span>
+        <p>TA-03 Pemodelan &amp; Simulasi<br>Teknik Informatika — UNIBBA</p>
       </div>
 
-      <div class="info-card">
-        <h3>⚙️ Konfigurasi Simulasi</h3>
-        <div class="formula">P<sub>t</sub> = P<sub>t-1</sub> × (1 + r<sub>acak</sub>)</div>
-        <div class="formula">r<sub>acak</sub> ~ N(μ = 0.001068, σ = 0.018171)</div>
-        <ul>
-          <li>Jumlah skenario: <strong>5.000 iterasi</strong></li>
-          <li>Horizon simulasi: <strong>30 hari perdagangan</strong></li>
-          <li>Generator: <strong>np.random.normal(μ, σ)</strong></li>
-          <li>Seed: <strong>42</strong> (reprodusibilitas)</li>
-          <li>Proteksi harga negatif: <strong>max(faktor, 0.000001)</strong></li>
-        </ul>
+      <div class="footer-col">
+        <span class="footer-col-title">METHODOLOGY</span>
+        <p>Data-Driven Monte Carlo Simulation<br>Apple Inc. (AAPL) Daily Returns</p>
       </div>
 
-      <div class="info-card">
-        <h3>📏 Rumus Probabilitas Risiko</h3>
-        <div class="formula">P(turun &gt;10%) = Jumlah(harga_akhir &lt; 0.9 × harga_awal) ÷ Total skenario</div>
-        <ul>
-          <li>Batas risiko: <strong>$209.65 × 0.90 = $188.68</strong></li>
-          <li>Skenario turun &gt;10%: <strong>449 dari 5.000</strong></li>
-          <li>Probabilitas: <strong>449 ÷ 5.000 = 8.98%</strong></li>
-          <li>Kategori risiko: <strong>RENDAH (&lt;10%)</strong></li>
-        </ul>
+      <div class="footer-col">
+        <span class="footer-col-title">REPOSITORY</span>
+        <a href="https://github.com/rizkihsn/TA03_Simulasi_Saham_AAPL" target="_blank" class="footer-link">
+          github.com/rizkihsn/TA03_Simulasi_Saham_AAPL ↗
+        </a>
       </div>
     </div>
 
-    <!-- ============ CONCLUSION ============ -->
-    <div class="conclusion-box">
-      <h3>✅ Kesimpulan</h3>
-      <p>
-        Berdasarkan simulasi Monte Carlo dengan <span class="highlight">5.000 skenario</span> menggunakan data historis 
-        saham Apple (AAPL) periode 2015–2024, diperoleh bahwa probabilitas harga saham turun lebih dari 10% 
-        dalam 30 hari perdagangan ke depan adalah <span class="highlight-red">8.98%</span>. 
-        Risiko ini tergolong <span class="highlight">RENDAH</span> (&lt;10%), menunjukkan bahwa saham AAPL 
-        relatif stabil dalam jangka pendek. Rata-rata harga akhir simulasi sebesar 
-        <span class="highlight">$216.68</span> (naik 3.35% dari harga awal $209.65) dengan probabilitas 
-        harga naik sebesar <span class="highlight">61.32%</span>.
-      </p>
+    <div class="footer-copyright">
+      <span>&copy; 2026 TA-03 Monte Carlo AAPL. Digital Cover Aesthetic.</span>
+      <a href="#hero" class="back-to-top">Back to top ↑</a>
     </div>
-
-    <!-- ============ FOOTER ============ -->
-    <footer>
-      <p>
-        TA-03 Pemodelan &amp; Simulasi — Data-Driven Monte Carlo Simulation<br>
-        <a href="https://github.com/rizkihsn/TA03_Simulasi_Saham_AAPL" target="_blank">GitHub Repository</a>
-      </p>
-    </footer>
-
-  </div>
+  </footer>
 
   <script src="script.js"></script>
 </body>
